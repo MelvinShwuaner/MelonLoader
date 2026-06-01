@@ -1,4 +1,6 @@
 use crate::{console, errors::DynErr, hooks, internal_failure};
+use std::fs;
+use crate::log;
 
 #[no_mangle]
 fn startup() {
@@ -10,13 +12,14 @@ fn startup() {
 fn init() -> Result<(), DynErr> {
     console::init()?;
 
+    hooks::exportresolver::init();
+
     hooks::init_hook::hook()?;
 
     console::null_handles()?;
 
     Ok(())
 }
-
 pub fn shutdown() {
     std::process::exit(0);
 }
